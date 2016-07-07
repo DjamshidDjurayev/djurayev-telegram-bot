@@ -49,13 +49,13 @@ bot.on('message', function (msg) {
             finishFunction();
             break;
         case "Сотрудники":
-            getStaffList()
+            getStaffList(msg)
             break;
         case "Новости":
-            getNewsList()
+            getNewsList(msg)
             break;
         case "Статистика":
-            getStatisticsList()
+            getStatisticsList(msg)
             break;
         default:
             bot.sendMessage(msg.chat.id, "no such command");
@@ -97,27 +97,6 @@ function showKeyboardButtons(arrayList, showText) {
     bot.sendMessage(chatId, showText ,options);
 }
 
-bot.on('callback_query', function (msg) {
-    var id = msg.from.id;
-    var messageText = msg.data;
-    console.log(msg.data);
-
-    getStaffList();
-
-    //switch (id) {
-    //    case 0:
-    //        getStaffList();
-    //        break;
-    //    case 1:
-    //        getNewsList();
-    //        break;
-    //    case 2:
-    //        getStatisticsList();
-    //        break;
-    //}
-    //bot.sendMessage(msg.from.id, "You clicked button with data '" + data + "'");
-});
-
 function showInlineKeyboardButtons() {
 
 }
@@ -136,7 +115,7 @@ function fillList() {
     listOfStrings[2] = "Статистика";
 }
 
-function getStaffList() {
+function getStaffList(msg) {
     request({
             method: 'GET',
             uri: baseUrl + '/api/persons',
@@ -146,11 +125,11 @@ function getStaffList() {
             console.log('error: ' + response.statusCode);
             listOfObjects = JSON.parse(body);
             console.log(listOfObjects.length);
-            bot.sendMessage(chatId, generateUserTableFormat(listOfObjects));
+            bot.sendMessage(msg.chat.id, generateUserTableFormat(listOfObjects));
         })
 }
 
-function getNewsList() {
+function getNewsList(msg) {
     request({
             method: 'GET',
             uri: baseUrl + '/api/news',
@@ -160,11 +139,11 @@ function getNewsList() {
             console.log('error: ' + response.statusCode);
             listOfObjects = JSON.parse(body);
             console.log(listOfObjects.length);
-            bot.sendMessage(chatId, generateNewsTableFormat(listOfObjects));
+            bot.sendMessage(msg.chat.id, generateNewsTableFormat(listOfObjects));
         })
 }
 
-function getStatisticsList() {
+function getStatisticsList(msg) {
     request({
             method: 'GET',
             uri: baseUrl + '/api/getStatistics?login=djamik123&password=djamik123',
@@ -173,7 +152,7 @@ function getStatisticsList() {
         function (error, response, body) {
             console.log('error: ' + response.statusCode);
             object = JSON.parse(body);
-            bot.sendMessage(chatId, generateStatisticsTableFormat(object));
+            bot.sendMessage(msg.chat.id, generateStatisticsTableFormat(object));
         })
 }
 
