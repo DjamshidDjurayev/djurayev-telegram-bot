@@ -11,7 +11,7 @@ var options = {
     port: 443}
 };
   bot = new TelegramBot(token, options);
-  bot.setWebHook('https://dry-earth-86943.herokuapp.com/' + token);
+  bot.setWebHook('https://ancient-journey-10592.herokuapp.com/' + token);
 
 console.log('bot server started...');
 
