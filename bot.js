@@ -205,6 +205,8 @@ function generateStatisticsTableFormat(object) {
 
     return statsTable;
 }
+
+module.exports = bot;
 // inline_keyboard - > buttons below messages
 // keyboard - > buttons below edit text field
 
