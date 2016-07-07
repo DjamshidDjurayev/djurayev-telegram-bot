@@ -1,0 +1,1 @@
+worker: nodejs index.js
