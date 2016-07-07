@@ -1,1 +1,3 @@
-require('bot.js');
+
+var bot = require('./bot');
+require('./web')(bot);
