@@ -6,12 +6,22 @@ var bot;
 var token = '187926574:AAFhSmhpPxpggGXfn616Hb1M22EMIxFoAEc';
 var fs = require('fs');
 var ownerChatId = 8966805; //replace this with your chat id noted previously
+/*
 var options = {
   webHook: {
     port: 443}
 };
-  bot = new TelegramBot(token, options);
-  bot.setWebHook('https://ancient-journey-10592.herokuapp.com/' + token);
+*/
+
+if(process.env.NODE_ENV === 'production') {
+  bot = new TelegramBot(token);
+  bot.setWebHook("https://ancient-journey-10592.herokuapp.com/" + token);
+}
+else {
+  bot = new TelegramBot(token, { polling: true });
+}
+  //bot = new TelegramBot(token, options);
+  //bot.setWebHook('https://ancient-journey-10592.herokuapp.com/' + token);
 
 console.log('bot server started...');
 
