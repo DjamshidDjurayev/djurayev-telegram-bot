@@ -90,8 +90,7 @@ function showKeyboardButtons(arrayList, showText) {
     }
     options = {
         reply_markup: JSON.stringify({
-            keyboard: mainButtonArray,
-            one_time_keyboard: true
+            keyboard: mainButtonArray
         })
     };
     bot.sendMessage(chatId, showText ,options);
