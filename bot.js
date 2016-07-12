@@ -23,7 +23,7 @@ bot.on('message', function (msg) {
     console.log(msg);
     switch (msg.text) {
         case "/start":
-            startBot();
+            startBot(msg);
             break;
         case "/end":
             finishBot();
