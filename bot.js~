@@ -12,7 +12,6 @@ var headers = {
     'Accept-Encoding': 'gzip'
 };
 var listOfObjects;
-var chatId;
 var messageText;
 var name;
 var lastName;
@@ -21,9 +20,10 @@ var mainButtonArray = [];
 var listOfStrings = [];
 
 bot.on('message', function (msg) {
+    console.log(msg);
     switch (msg.text) {
         case "/start":
-            startBot(msg);
+            startBot();
             break;
         case "/end":
             finishBot();
@@ -38,7 +38,7 @@ bot.on('message', function (msg) {
             getStatisticsList()
             break;
         case "Получить свои фото":
-            getUserPhotos(msg.chat.id)
+            getUserPhotos(msg.from.id, msg.chat.id)
             break;
         default:
             bot.sendMessage(msg.chat.id, "no such command");
@@ -51,11 +51,8 @@ bot.on('message', function (msg) {
 //});
 
 
-function startBot(msg) {
-    chatId = msg.chat.id;
-    messageText = msg.message_id;
-    name = msg.chat.first_name;
-    last_name = msg.chat.last_name
+function startBot() {
+
     fillList();
     showKeyboardButtons(listOfStrings, "Что вас интересует?")
 }
@@ -189,16 +186,15 @@ function generateStatisticsTableFormat(object) {
     return statsTable;
 }
 
-function getUserPhotos(chatId) {
-    bot.getUserProfilePhotos(chatId)
+function getUserPhotos(senderId, receiverId) {
+    bot.getUserProfilePhotos(senderId)
         .then(function (resolve, reject) {
             if (resolve != undefined) {
                 var object = JSON.parse(JSON.stringify(resolve));
                 var photoList = object.photos;
                 console.log(photoList[0][0]["file_id"]);
                 for (var i = 0; i < photoList.length; i++) {
-                    for (var j = 0; j < photoList[i].length; j++)
-                    bot.sendPhoto(chatId, photoList[i][j]["file_id"]);
+                    bot.sendPhoto(receiverId, photoList[i][0]["file_id"]);
                 }
             } else if (reject != undefined) {
                 console.log(JSON.stringify(reject));
