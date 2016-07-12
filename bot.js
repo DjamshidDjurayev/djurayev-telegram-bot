@@ -17,6 +17,7 @@ var options;
 var listOfStrings = [];
 var fromChatId;
 var toChatId;
+bot.getUpdates();
 
 bot.on('message', function (msg) {
 fromChatId = msg.from.id;
