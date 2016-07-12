@@ -12,41 +12,38 @@ var headers = {
     'Accept-Encoding': 'gzip'
 };
 var listOfObjects;
-var messageText;
 var name;
-var lastName;
 var options;
-var mainButtonArray = [];
 var listOfStrings = [];
 var fromChatId;
 var toChatId;
 
 bot.on('message', function (msg) {
-fromChatId = msg.from.id;
-toChatId = msg.chat.id;
-switch (msg.text) {
-    case "/start":
-        startBot();
-        break;
-    case "/end":
-        finishBot();
-        break;
-    case "Сотрудники":
-        getStaffList()
-        break;
-    case "Новости":
-        getNewsList()
-        break;
-    case "Статистика":
-        getStatisticsList()
-        break;
-    case "Получить свои фото":
-        getUserPhotos()
-        break;
-    default:
-        bot.sendMessage(msg.chat.id, "no such command");
-        break;
-}
+    fromChatId = msg.from.id;
+    toChatId = msg.chat.id;
+    switch (msg.text) {
+        case "/start":
+            startBot();
+            break;
+        case "/end":
+            finishBot();
+            break;
+        case "Сотрудники":
+            getStaffList()
+            break;
+        case "Новости":
+            getNewsList()
+            break;
+        case "Статистика":
+            getStatisticsList()
+            break;
+        case "Мои фото":
+            getUserPhotos()
+            break;
+        default:
+            bot.sendMessage(msg.chat.id, "no such command");
+            break;
+    }
 });
 
 //bot.on('command', function (msg){
@@ -63,60 +60,43 @@ function finishBot() {
     //do some stuff
 }
 
-function showKeyboardButtons(arrayList, showText) {
-    for (var i = 0; i < arrayList.length; i++) {
-        var tempButtonArray = [];
-        tempButtonArray[0] = getJSONObject(arrayList[i], i);
-        mainButtonArray[i] = tempButtonArray;
-    }
+function showKeyboardButtons(showText) {
     options = {
         reply_markup: JSON.stringify({
-            keyboard: mainButtonArray,
+            keyboard: [
+                [{ text: 'Сотрудники', callback_data: '1' },{ text: 'Новости', callback_data: '2' }],
+                [{ text: 'Статистика', callback_data: '3' }, { text: 'Мои фото', callback_data: '4' }]
+            ],
             one_time_keyboard: true
         })
     };
     bot.sendMessage(toChatId, showText, options);
 }
 
-bot.on('callback_query', function (msg) {
-    var id = msg.from.id;
-    var messageText = msg.data;
-    console.log(msg.data);
+//bot.on('callback_query', function (msg) {
+//    var id = msg.from.id;
+//    var messageText = msg.data;
+//    console.log(msg.data);
+//
+//    getStaffList();
+//
+//    //switch (id) {
+//    //    case 0:
+//    //        getStaffList();
+//    //        break;
+//    //    case 1:
+//    //        getNewsList();
+//    //        break;
+//    //    case 2:
+//    //        getStatisticsList();
+//    //        break;
+//    //}
+//    //bot.sendMessage(msg.from.id, "You clicked button with data '" + data + "'");
+//});
 
-    getStaffList();
-
-    //switch (id) {
-    //    case 0:
-    //        getStaffList();
-    //        break;
-    //    case 1:
-    //        getNewsList();
-    //        break;
-    //    case 2:
-    //        getStatisticsList();
-    //        break;
-    //}
-    //bot.sendMessage(msg.from.id, "You clicked button with data '" + data + "'");
-});
-
-function showInlineKeyboardButtons() {
-
-}
-
-function getJSONObject(textString, index) {
-    var object = {
-        text: textString,
-        callback_data: index
-    };
-    return object;
-}
-
-function fillList() {
-    listOfStrings[0] = "Сотрудники";
-    listOfStrings[1] = "Новости";
-    listOfStrings[2] = "Статистика";
-    listOfStrings[3] = "Получить свои фото";
-}
+//function showInlineKeyboardButtons() {
+//
+//}
 
 function getStaffList() {
     request({
@@ -169,7 +149,7 @@ function generateUserTableFormat(list) {
 }
 
 function generateNewsTableFormat(list) {
-    var newsTable = 'News:\n';
+    var newsTable = 'NEWS:\n';
     for (var i = 0; i < list.length; i++) {
         newsTable += (i + 1 + '. ') + list[i]['title'] + ' ' + list[i]['description'] + ';\n'
     }
