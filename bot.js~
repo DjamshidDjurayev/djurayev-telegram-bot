@@ -61,8 +61,7 @@ function showKeyboardButtons(arrayList, showText) {
             keyboard: [
                 [{ text: 'Сотрудники', callback_data: '1' }, { text: 'Новости', callback_data: '2' }],
                 [{ text: 'Статистика', callback_data: '3' }, { text: 'Мои фото', callback_data: '4' }],
-            ],
-            one_time_keyboard: true
+            ]
         })
     };
     bot.sendMessage(toChatId, showText, options);
