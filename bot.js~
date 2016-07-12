@@ -52,7 +52,6 @@ bot.on('message', function (msg) {
 
 
 function startBot() {
-
     fillList();
     showKeyboardButtons(listOfStrings, "Что вас интересует?")
 }

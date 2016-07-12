@@ -51,16 +51,16 @@ bot.on('message', function (msg) {
 //});
 
 
-function startBot() {
+function startBot(msg) {
     fillList();
-    showKeyboardButtons(listOfStrings, "Что вас интересует?")
+    showKeyboardButtons(listOfStrings, "Что вас интересует?", msg.chat.id)
 }
 
 function finishBot() {
     //do some stuff
 }
 
-function showKeyboardButtons(arrayList, showText) {
+function showKeyboardButtons(arrayList, showText, chatId) {
     for (var i = 0; i < arrayList.length; i++) {
         var tempButtonArray = [];
         tempButtonArray[0] = getJSONObject(arrayList[i], i);
