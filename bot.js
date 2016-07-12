@@ -21,7 +21,7 @@ var listOfStrings = [];
 var fromChatId;
 var toChatId;
 
-bot.on('message', function (msg) {
+sbot.on('message', function (msg) {
 fromChatId = msg.from.id;
 toChatId = msg.chat.id;
 switch (msg.text) {
@@ -71,7 +71,11 @@ function showKeyboardButtons(arrayList, showText) {
     }
     options = {
         reply_markup: JSON.stringify({
-            keyboard: mainButtonArray,
+            keyboard: [
+                [{ text: 'Some button text 1', callback_data: '1' }],
+                [{ text: 'Some button text 2', callback_data: '2' }],
+                [{ text: 'Some button text 3', callback_data: '3' }]
+            ],
             one_time_keyboard: true
         })
     };
