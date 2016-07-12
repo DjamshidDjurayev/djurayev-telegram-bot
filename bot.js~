@@ -21,32 +21,32 @@ var listOfStrings = [];
 var fromChatId;
 var toChatId;
 
-bot.on('message', function (msg) 
-    fromChatId = msg.from.id;
-    toChatId = msg.chat.id;
-    switch (msg.text) {
-        case "/start":
-            startBot();
-            break;
-        case "/end":
-            finishBot();
-            break;
-        case "Сотрудники":
-            getStaffList()
-            break;
-        case "Новости":
-            getNewsList()
-            break;
-        case "Статистика":
-            getStatisticsList()
-            break;
-        case "Получить свои фото":
-            getUserPhotos()
-            break;
-        default:
-            bot.sendMessage(msg.chat.id, "no such command");
-            break;
-    }
+bot.on('message', function (msg) {
+fromChatId = msg.from.id;
+toChatId = msg.chat.id;
+switch (msg.text) {
+    case "/start":
+        startBot();
+        break;
+    case "/end":
+        finishBot();
+        break;
+    case "Сотрудники":
+        getStaffList()
+        break;
+    case "Новости":
+        getNewsList()
+        break;
+    case "Статистика":
+        getStatisticsList()
+        break;
+    case "Получить свои фото":
+        getUserPhotos()
+        break;
+    default:
+        bot.sendMessage(msg.chat.id, "no such command");
+        break;
+}
 });
 
 //bot.on('command', function (msg){
@@ -54,7 +54,7 @@ bot.on('message', function (msg)
 //});
 
 
-function startBot(msg) {
+function startBot() {
     fillList();
     showKeyboardButtons(listOfStrings, "Что вас интересует?")
 }
@@ -194,9 +194,13 @@ function getUserPhotos() {
             if (resolve != undefined) {
                 var object = JSON.parse(JSON.stringify(resolve));
                 var photoList = object.photos;
-                console.log(photoList[0][0]["file_id"]);
-                for (var i = 0; i < photoList.length; i++) {
-                    bot.sendPhoto(toChatId, photoList[i][0]["file_id"]);
+                //console.log(photoList[0][0]["file_id"]);
+                if (photoList.length != 0) {
+                    for (var i = 0; i < photoList.length; i++) {
+                        bot.sendPhoto(toChatId, photoList[i][0]["file_id"]);
+                    }
+                } else {
+                    bot.sendMessage(toChatId, "На данный момент у вас нет фотографий");
                 }
             } else if (reject != undefined) {
                 console.log(JSON.stringify(reject));
