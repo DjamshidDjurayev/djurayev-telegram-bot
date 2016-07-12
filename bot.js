@@ -18,12 +18,15 @@ var lastName;
 var options;
 var mainButtonArray = [];
 var listOfStrings = [];
+var fromChatId;
+var toChatId;
 
-bot.on('message', function (msg) {
-    console.log(msg);
+bot.on('message', function (msg) 
+    fromChatId = msg.from.id;
+    toChatId = msg.chat.id;
     switch (msg.text) {
         case "/start":
-            startBot(msg);
+            startBot();
             break;
         case "/end":
             finishBot();
@@ -38,7 +41,7 @@ bot.on('message', function (msg) {
             getStatisticsList()
             break;
         case "Получить свои фото":
-            getUserPhotos(msg.from.id, msg.chat.id)
+            getUserPhotos()
             break;
         default:
             bot.sendMessage(msg.chat.id, "no such command");
@@ -53,14 +56,14 @@ bot.on('message', function (msg) {
 
 function startBot(msg) {
     fillList();
-    showKeyboardButtons(listOfStrings, "Что вас интересует?", msg.chat.id)
+    showKeyboardButtons(listOfStrings, "Что вас интересует?")
 }
 
 function finishBot() {
     //do some stuff
 }
 
-function showKeyboardButtons(arrayList, showText, chatId) {
+function showKeyboardButtons(arrayList, showText) {
     for (var i = 0; i < arrayList.length; i++) {
         var tempButtonArray = [];
         tempButtonArray[0] = getJSONObject(arrayList[i], i);
@@ -72,7 +75,7 @@ function showKeyboardButtons(arrayList, showText, chatId) {
             one_time_keyboard: true
         })
     };
-    bot.sendMessage(chatId, showText, options);
+    bot.sendMessage(toChatId, showText, options);
 }
 
 bot.on('callback_query', function (msg) {
@@ -125,7 +128,7 @@ function getStaffList() {
             console.log('error: ' + response.statusCode);
             listOfObjects = JSON.parse(body);
             console.log(listOfObjects.length);
-            bot.sendMessage(chatId, generateUserTableFormat(listOfObjects));
+            bot.sendMessage(toChatId, generateUserTableFormat(listOfObjects));
         })
 }
 
@@ -139,7 +142,7 @@ function getNewsList() {
             console.log('error: ' + response.statusCode);
             listOfObjects = JSON.parse(body);
             console.log(listOfObjects.length);
-            bot.sendMessage(chatId, generateNewsTableFormat(listOfObjects));
+            bot.sendMessage(toChatId, generateNewsTableFormat(listOfObjects));
         })
 }
 
@@ -152,7 +155,7 @@ function getStatisticsList() {
         function (error, response, body) {
             console.log('error: ' + response.statusCode);
             object = JSON.parse(body);
-            bot.sendMessage(chatId, generateStatisticsTableFormat(object));
+            bot.sendMessage(toChatId, generateStatisticsTableFormat(object));
         })
 }
 
@@ -185,15 +188,15 @@ function generateStatisticsTableFormat(object) {
     return statsTable;
 }
 
-function getUserPhotos(senderId, receiverId) {
-    bot.getUserProfilePhotos(senderId)
+function getUserPhotos() {
+    bot.getUserProfilePhotos(fromChatId)
         .then(function (resolve, reject) {
             if (resolve != undefined) {
                 var object = JSON.parse(JSON.stringify(resolve));
                 var photoList = object.photos;
                 console.log(photoList[0][0]["file_id"]);
                 for (var i = 0; i < photoList.length; i++) {
-                    bot.sendPhoto(receiverId, photoList[i][0]["file_id"]);
+                    bot.sendPhoto(toChatId, photoList[i][0]["file_id"]);
                 }
             } else if (reject != undefined) {
                 console.log(JSON.stringify(reject));
