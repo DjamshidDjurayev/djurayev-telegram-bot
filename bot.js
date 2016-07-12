@@ -12,16 +12,13 @@ var headers = {
     'Accept-Encoding': 'gzip'
 };
 var listOfObjects;
-var messageText;
 var name;
-var lastName;
 var options;
-var mainButtonArray = [];
 var listOfStrings = [];
 var fromChatId;
 var toChatId;
 
-sbot.on('message', function (msg) {
+bot.on('message', function (msg) {
 fromChatId = msg.from.id;
 toChatId = msg.chat.id;
 switch (msg.text) {
@@ -40,7 +37,7 @@ switch (msg.text) {
     case "Статистика":
         getStatisticsList()
         break;
-    case "Получить свои фото":
+    case "Мои фото":
         getUserPhotos()
         break;
     default:
@@ -49,13 +46,7 @@ switch (msg.text) {
 }
 });
 
-//bot.on('command', function (msg){
-//    console.log(JSON.stringify(msg));
-//});
-
-
 function startBot() {
-    fillList();
     showKeyboardButtons(listOfStrings, "Что вас интересует?")
 }
 
@@ -64,17 +55,11 @@ function finishBot() {
 }
 
 function showKeyboardButtons(arrayList, showText) {
-    for (var i = 0; i < arrayList.length; i++) {
-        var tempButtonArray = [];
-        tempButtonArray[0] = getJSONObject(arrayList[i], i);
-        mainButtonArray[i] = tempButtonArray;
-    }
     options = {
         reply_markup: JSON.stringify({
             keyboard: [
-                [{ text: 'Some button text 1', callback_data: '1' }],
-                [{ text: 'Some button text 2', callback_data: '2' }],
-                [{ text: 'Some button text 3', callback_data: '3' }]
+                [{ text: 'Сотрудники', callback_data: '1' }, { text: 'Новости', callback_data: '2' }],
+                [{ text: 'Статистика', callback_data: '3' }, { text: 'Мои фото', callback_data: '4' }],
             ],
             one_time_keyboard: true
         })
@@ -105,21 +90,6 @@ bot.on('callback_query', function (msg) {
 
 function showInlineKeyboardButtons() {
 
-}
-
-function getJSONObject(textString, index) {
-    var object = {
-        text: textString,
-        callback_data: index
-    };
-    return object;
-}
-
-function fillList() {
-    listOfStrings[0] = "Сотрудники";
-    listOfStrings[1] = "Новости";
-    listOfStrings[2] = "Статистика";
-    listOfStrings[3] = "Получить свои фото";
 }
 
 function getStaffList() {
